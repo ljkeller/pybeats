@@ -2,7 +2,9 @@ import PySimpleGUI as sg
 import os
 from playsound import playsound
 from matplotlib import pyplot as plt
+import matplotlib
 import numpy as np
+matplotlib.use('TkAgg')
 
 
 FIG_H, FIG_W = 500, 500
@@ -24,7 +26,7 @@ plt.show()
 
 
 sg.theme('Dark Black') 
-ls = os.listdir("/home/ljkeller/code/python/pybeats/54__sleep__guitar/")
+ls = os.listdir("/Users/lucaskeller/code/py/pybeats/54__sleep__guitar/")
 ls.sort()
 ls = list(filter(lambda f: f.endswith(".wav"), ls))
 # All this inside window
@@ -40,6 +42,7 @@ window = sg.Window(win_name, layout)
 # Event loop to process events
 while True:
     event, values = window.read()
+    print("Hello")
     if event in (None, 'Cancel'):
         break
     if event == "Play":
