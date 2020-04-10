@@ -22,12 +22,13 @@ If you want to change the GUI, make changes to the GUI portion marked below.
 
 """
 
+AUD_FREQ = 20000 # Audible sound ranges
 NUM_LOOPS = 100 
 
-def useful_freqs(omegas, fourier_coeffs):
+def useful_freqs(omegas, fourier_coeffs, upperbound):
     tracker = 0;
     for i in range(0, omegas.size):
-        if abs(fourier_coeffs[i].real) > 1000000 or abs(fourier_coeffs[i].imag) > 1000000:
+        if abs(fourier_coeffs[i].real) > upperbound or abs(fourier_coeffs[i].imag) > upperbound:
             tracker = i
     return tracker
 
@@ -54,19 +55,17 @@ n_omegas = omegas.size
 
 max_magr = max(fourier_coeffs.real)
 max_magi = max(fourier_coeffs.imag)
-max_mag = max(max_magr, max_magi)
+max_mag = np.fmax(max_magr, max_magi)
 #fourier_coeffs = fourier_coeffs / max(max_mag)
 #fourier_coeffs.imag = fourier_coeffs.imag / max(max_mag)
 
-max_w = useful_freqs(omegas, fourier_coeffs)
+max_w = useful_freqs(omegas, fourier_coeffs, max_mag/10)
 
 plt.figure()
 plt.ion()
 plt.plot(omegas, fourier_coeffs)
 plt.ylabel('Amplitude')
 plt.title('Fourier Transform')
-plt.ylim(-10, 10)
-plt.xlim(0, 10000)
 
 # ------------------------------- END OF YOUR MATPLOTLIB CODE -------------------------------
 
@@ -109,8 +108,8 @@ for i in range(0, NUM_LOOPS):
 
     #Live plotting
     fig.clear()
-    plt.ylim(-max_mag, max_mag)
-    plt.xlim(0, max_w)
+    plt.ylim(-max_mag/10, max_mag/10)
+    plt.xlim(0, 20000)
     plt.plot(omegas, fourier_coeffs.real, 'r', omegas, fourier_coeffs.imag, 'r')
     fig_photo.draw()
 
